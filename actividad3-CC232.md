@@ -205,11 +205,29 @@ Revisen:
 Respondan:
 
 1. ¿Qué operaciones mínimas valida la prueba pública para `SLList`?
+
+Las operaciones que valida son add para agregar al final, push para agregar al inicio, size para obtener tamaño, peek y remove.
+
 2. ¿Qué operaciones mínimas valida la prueba pública para `DLList`?
+
+Las operaciones que valida son add(i,x) para agregar en posiciones específicas, size, get y remove por indice.
+
 3. ¿Qué operaciones mínimas valida la prueba pública para `SEList`?
+
+Valida las mismas que en la pregunta numero 2 más set(i,x) lo cual es modificacion por índice.
+
 4. ¿Qué operaciones nuevas quedan cubiertas por `test_public_extras.cpp`?
+
+Las operaciones que incluye son rotate, 
+
 5. ¿Qué valida específicamente `test_public_linked_adapters.cpp` sobre `LinkedStack`, `LinkedQueue` y `LinkedDeque`?
+
+
+
 6. ¿Qué demuestra `test_public_deng_bridge.cpp` sobre integración y reutilización?
+
+
+
 7. En `stress_selist_week3.cpp`, ¿qué comportamiento intenta estresar sobre crecimiento, borrado y mantenimiento del tamaño lógico?
 8. ¿Qué sí demuestra una prueba pública sobre una estructura enlazada?
 9. ¿Qué no demuestra una prueba pública por sí sola?
