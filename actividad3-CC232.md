@@ -149,16 +149,43 @@ Construyan una tabla con cuatro columnas:
 - Idea estructural
 - Argumento de costo, espacio o diseño
 
+demo_dllist.cpp -- 
+
 Luego respondan:
 
 1. En `demo_sllist.cpp`, ¿qué secuencia deja más clara la coexistencia de comportamiento tipo pila y tipo cola dentro de `SLList`?
+
+La secuencia que deja clara la coexistencia es: q.add(10) , q.add(20) , q.push(5)
+- Comportamiento de queue con add(10) y add(20) agregarndo al final.
+- Comportamiento de stack con push(5) agregando al inicio.
+
 2. En `demo_dllist.cpp`, ¿qué operación muestra mejor la inserción en una posición intermedia?
+
+La operación que muestra mejor la posición intermedia es d.add(1,20).
+
 3. En `demo_selist.cpp`, ¿qué observable permite defender que la lista mantiene orden lógico aunque internamente trabaje por bloques?
+
+El observable es recorrer la lista con s.get(i).
+
 4. En `demo_deng_list.cpp`, ¿qué evidencia muestra que la lista reforzada por Deng ofrece operaciones más cercanas a un ADT de lista completo?
+
+La evidencias como push_back, push_front, size(), front() lo cual muestra que no es solo una lista básica, ofrece operaciones de inserción, acceso a extremos, tamaño y método de ordenamiento.
+
 5. En `demo_morin_deng_bridge.cpp`, ¿qué parte de la salida permite justificar que se reutilizan algoritmos sin reescribir la estructura base?
+
+
+
 6. En `demo_min_structures.cpp`, ¿qué diferencia conceptual observan entre almacenar valores y almacenar información adicional para responder `min()`?
+
+
+
 7. En `demo_linked_adapters.cpp`, ¿qué adaptador representa mejor la idea de reutilizar una estructura existente para ofrecer una interfaz nueva?
+
+
+
 8. En `demo_contiguous_vs_linked.cpp`, ¿qué contraste se observa entre acceso por índice, inserción local y localidad de memoria?
+
+
 
 #### Bloque 3 - Pruebas públicas, stress y correctitud
 
