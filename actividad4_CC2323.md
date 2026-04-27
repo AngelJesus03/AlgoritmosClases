@@ -135,12 +135,35 @@ Construye una tabla con cuatro columnas:
 Luego responde:
 
 1. En `demo_stack_queue.cpp`, ¿qué parte de la salida deja más clara la diferencia entre tope y frente?
+
+La parte que deja más clara la diferencia es cuando se imprime “Tope de la pila” frente a “Frente de la cola”, porque ahí se ve directamente cómo cada estructura “mira” sus elementos: 
+- En la pila (stack), el tope corresponde al último valor insertado (9)
+- Mientras que en la cola (queue), el frente corresponde al primer valor que entró (10)
+Este contraste muestra claramente que la pila trabaja con el elemento más reciente, mientras la cola respeta el orden de llegada.
+
 2. En `demo_base_conversion.cpp`, ¿qué observable permite afirmar que las versiones recursiva e iterativa producen la misma representación?
+
+Lo que afirma ello es la misma representación es que las dos imprimen exactamente la misma cadena como resultado para el mismo número y base; es decir, si tanto la versión recursiva como la iterativa muestran, el mismo valor en base 8 para 12345, entonces queda claro que, aunque usan métodos distintos, están construyendo la misma salida final, lo que demuestra que son equivalentes en funcionamiento.
+
 3. En `demo_paren_rpn.cpp`, ¿qué relación observas entre paréntesis balanceados, RPN y valor final?
+
+La relación es que los paréntesis balanceados aseguran que la expresión sea válida, lo que permite convertirla correctamente a RPN, y a partir de esa RPN se puede calcular el valor final; es decir, si la estructura inicial está bien, tanto la conversión como el resultado serán correctos.
+
 4. En `demo_nqueens.cpp`, ¿qué significan `solutions` y `checks`, y por qué no miden lo mismo?
+
+
+
 5. En `demo_maze.cpp`, ¿qué muestra la secuencia de coordenadas sobre el camino encontrado?
+
+
+
 6. En `demo_bank.cpp`, ¿qué representa cada lista impresa en cada instante `t`?
+
+
+
 7. En `demo_capitulo4_panorama.cpp`, ¿qué salida resume mejor la idea de que una misma semana reúne estructuras y aplicaciones?
+
+
 
 #### Bloque 3 - Pruebas públicas, pruebas internas y correctitud
 
