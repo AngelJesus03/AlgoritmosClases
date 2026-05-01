@@ -5,38 +5,48 @@
 - ANGEL JESUS NAVARRO RUIZ
 
 #### Bloque 1
-##### 1. Memoria Contigua
+1. Expliquen con sus palabras qué significa que un arreglo use **memoria contigua**.
+
 Significa que todos los elementos de la estructura se almacenan en un único bloque de memoria ininterrumpido. La disposición lógica de los elementos corresponde de forma exacta y directa a su disposición física secuencial en la memoria del sistema.
 
-##### 2. Acceso Directo O(1)
-El acceso a `A[i]` es $O(1)$ porque, al estar alojado en memoria contigua, no se necesita recorrer secuencialmente los elementos previos para encontrar el dato buscado. La computadora encuentra la dirección exacta aplicando una fórmula: suma la dirección de inicio del bloque con el desplazamiento (índice multiplicado por el tamaño del elemento).
+2. Expliquen por qué acceder a `A[i]` es una operación de costo `O(1)`.
 
-##### 3. Tamaño (Size) vs. Capacidad (Capacity)
+El acceso a A[i] es O(1) porque, al estar alojado en memoria contigua, no se necesita recorrer secuencialmente los elementos previos para encontrar el dato buscado. La computadora encuentra la dirección exacta aplicando una fórmula: suma la dirección de inicio del bloque con el desplazamiento (m + i . s).
+
+3. Expliquen la diferencia entre `size` y `capacity`.
+
 * **Size**: Representa la cantidad real de elementos válidos que la secuencia contiene actualmente (plano lógico).
 * **Capacity**: Indica el total de celdas o espacio de memoria reservado internamente, el cual puede ser mayor al tamaño para permitir crecimiento futuro (plano físico).
 
-##### 4. Limitaciones del Resize
-Un arreglo dinámico no puede crecer "en el mismo sitio" porque no hay garantía de que la memoria física ubicada inmediatamente después esté libre. Por ello, al agotarse la capacidad, se debe reservar un bloque nuevo en otro lugar, copiar los datos y liberar el anterior.
+4. Expliquen por qué un arreglo dinámico no puede crecer "en el mismo sitio" y necesita reservar un bloque nuevo al hacer `resize()`.
 
-##### 5. Costo Amortizado O(1)
-Duplicar la capacidad asegura que, tras pagar el costo $O(n)$ de redimensionar, existan suficientes celdas libres para realizar muchas inserciones baratas ($O(1)$) antes del próximo redimensionamiento. Al distribuir el costo total de las expansiones entre todas las operaciones de una secuencia, el costo promedio resulta constante.
+La principal limitación del procedimiento de redimensionamiento radica en su costo temporal lineal O(n) por operación individual, ya que al estar basado en la rigidez de un bloque de memoria contigua, requiere reservar un espacio completamente nuevo, realizar una copia profunda de todos los elementos y liberar el arreglo anterior. Esta operación no solo genera picos de latencia, sino que también enfrenta desafíos de eficiencia espacial: si la capacidad es muy superior al tamaño real se produce un desperdicio de memoria (underflow), lo que obliga a ejecutar procesos de reducción (shrink) que son igualmente costosos. Además, en implementaciones más complejas como las colas circulares, el resize tiene la limitación de requerir una normalización del orden lógico de los elementos durante la copia, lo que añade una carga algorítmica adicional para mantener la integridad de la estructura.
 
-##### 6. ArrayStack vs. DengVector
+5. Expliquen por qué duplicar capacidad permite defender costo amortizado `O(1)` para inserciones al final.
+
+Duplicar la capacidad asegura que, tras pagar el costo O(n) de redimensionar, existan suficientes celdas libres para realizar muchas inserciones baratas O(1) antes del próximo redimensionamiento. Al distribuir el costo total de las expansiones entre todas las operaciones de una secuencia, el costo promedio resulta constante.
+
+6. Comparen `ArrayStack` y `DengVector`: ¿qué comparten y qué cambia en interfaz o intención didáctica?
+
 * **Comparten**: Ambos usan un arreglo dinámico de respaldo contiguo y estrategias de redimensionamiento.
 * **Diferencias**: `ArrayStack` es una implementación minimalista orientada a la interfaz `List` básica. `DengVector` tiene una intención didáctica más profunda, enfocándose en el control del ciclo de vida (copia profunda, operadores de asignación) y ofreciendo un repertorio algorítmico más rico como búsqueda y deduplicación.
 
-##### 7. Optimización de FastArrayStack
+7. Expliquen qué mejora `FastArrayStack` respecto a `ArrayStack`.
+
 `FastArrayStack` mejora el rendimiento práctico sustituyendo los bucles `for` explícitos por rutinas especializadas de bajo nivel como `std::copy` o `std::copy_backward`. Aunque no cambia la complejidad asintótica, acelera la ejecución empírica de forma significativa.
 
-##### 8. Idea Espacial de RootishArrayStack
+8. Expliquen cuál es la idea espacial central de `RootishArrayStack`.
+
 Su idea central es minimizar el desperdicio de memoria. En lugar de un solo arreglo que duplica su tamaño (desperdiciando hasta $O(n)$), divide los elementos en múltiples bloques de tamaño creciente.
 
-##### 9. Bloques de Tamaño 1, 2, 3...
+9. Expliquen por qué `RootishArrayStack` usa bloques de tamaños `1, 2, 3, ...`.
+
 Se utilizan bloques con progresión aritmética para que la capacidad total crezca de forma controlada. Esto limita el desperdicio de espacio únicamente al último bloque, resultando en un desperdicio de solo $O(\sqrt{n})$ respecto al total de elementos.
 
-##### 10. Representación, Costo y Desperdicio
+10. Expliquen qué relación hay entre representación, costo temporal y desperdicio espacial en estas estructuras.
+
 Existe un compromiso (*trade-off*) constante:
-* La **representación** de arreglo simple da acceso rápido ($O(1)$) pero es rígida.
+* La **representación** de arreglo simple da acceso rápido O(1) pero es rígida.
 * Mantener la contigüidad ante cambios estructurales implica un alto **costo temporal** por desplazamientos.
 * Para reducir la frecuencia de estos costos (redimensionamiento), se acepta un margen de **desperdicio espacial** (capacidad excedente).
 
@@ -130,12 +140,32 @@ El **mapeo `i2b(i)`** suele ser la parte más difícil de explicar y defender or
 
 ##### 1. ¿Qué aporta `operator[]` a la idea de vector?
 
+La sobrecarga del operator[] permite recuperar el estilo de acceso directo propio de los arreglos tradicionales sin renunciar a la encapsulación que ofrece el vector. Esta funcionalidad aporta una notación natural que mejora la claridad del código y acerca la implementación técnica al modelo mental intuitivo del programador, facilitando el uso de la estructura como una secuencia indexada de fácil acceso.
+
 ##### 2. ¿Qué supone `find(e)` sobre igualdad entre elementos?
+
+La operación find(e) supone que el tipo de dato almacenado tiene definida una relación de igualdad que permite compararlo con el elemento buscado e. Dado que se realiza una búsqueda secuencial en vectores no ordenados, el algoritmo asume que puede verificar la identidad de cada elemento para devolver la coincidencia de mayor rango o un valor de -1 en caso de que no exista un elemento igual en la estructura.
+
 ##### 3. ¿Qué muestra `traverse()` sobre procesamiento uniforme de toda la estructura?
+
+La función traverse() muestra que el vector está diseñado para el procesamiento uniforme al permitir tratar la colección como un todo y aplicar una misma transformación o acción sobre cada uno de sus elementos. Esta operación refleja una idea de alto nivel donde el vector deja de ser un simple contenedor pasivo para convertirse en una estructura que soporta operaciones globales mediante objetos función, manteniendo un costo lineal respecto al tamaño total.
+
 ##### 4. ¿Por qué esta lectura sirve como refuerzo natural de `DengVector` aunque no sea el centro exclusivo de la semana?
 
+Esta lectura refuerza el concepto de DengVector porque profundiza en los fundamentos del vector como un Tipo de Dato Abstracto (ADT), tales como la gestión dinámica de memoria, la distinción entre tamaño y capacidad, y el análisis amortizado. Al comparar diversas listas basadas en arreglos, se clarifica que el diseño del vector basado en el rango y en estrategias como la duplicación de capacidad es una respuesta técnica para equilibrar la rigidez de la memoria física con la eficiencia necesaria en las operaciones modernas.
+
 #### Bloque 7
-(respuesta final)
+Al pasar de usar un simple arreglo a diseñar una estructura dinámica basada en arreglos, la transición implica dejar de ver la memoria como un bloque estático para convertirla en un Tipo de Dato Abstracto (ADT) con lógica propia.Los cambios fundamentales se resumen en los siguientes puntos:
+
+- Representación: La estructura evoluciona de un simple bloque indexado a una abstracción basada en el rango, donde se separa estrictamente la capacidad física (memoria reservada) del tamaño lógico (elementos válidos), permitiendo que la disposición física en memoria coincida con el orden secuencial para mantener el acceso directo.
+
+- Correctitud: La validez de la estructura depende de garantizar la propiedad y liberación de la memoria mediante el uso de copias profundas (evitando que dos instancias compartan el mismo bloque interno) y el mantenimiento de invariantes lógicas que aseguran la integridad de los datos durante operaciones como la eliminación de duplicados.
+
+- Costo amortizado: Aunque operaciones como el resize() tienen un costo individual lineal O(n), el uso de una política de duplicación de capacidad asegura que el costo total de los redimensionamientos en una secuencia larga de operaciones sea O(m), lo que resulta en un costo amortizado constante (O(1)) por operación
+
+- Uso de espacio: Se introduce el concepto de factor de carga para equilibrar la eficiencia espacial; así, mediante el procedimiento shrink(), se combate el desperdicio de memoria (underflow) cuando la ocupación cae por debajo de un umbral, manteniendo un equilibrio entre rapidez y uso de recursos.
+
+- Comparación de estructuras: El ArrayStack es la implementación base que ofrece eficiencia en el extremo final; el FastArrayStack optimiza el rendimiento práctico (acelerando la ejecución 2 o 3 veces) mediante rutinas de copia de bajo nivel sin cambiar la complejidad asintótica; por último, cabe señalar que RootishArrayStack no se menciona en las fuentes proporcionadas, por lo que no es posible establecer su comparación técnica basada exclusivamente en este material (aunque habitualmente se conoce por optimizar el desperdicio de espacio a un nivel sublineal).
 
 #### Autoevaluación breve
 - Qué podemos defender con seguridad:
