@@ -189,17 +189,16 @@ Esto genera tres ejecutables dentro de `build/`:
 Salida esperada:
 
 ```
-Tamaño      Lineal O(n)       Sort O(nlogn)         Binaria O(logn)
-----------------------------------------------------------------------
-1000        0.0012            0.0089                0.0001
-10000       0.0120            0.1100                0.0001
-100000      0.1200            1.3000                0.0001
-1000000     1.2000            15.000                0.0002
+Tamaño     Opcion A O(n^2) ms       Opcion B O(n) ms         
+------------------------------------------------------------
+100         0.0215                   0.0083                   
+1000        2.0501                   0.0758                   
+10000       157.5813                 0.7322 
 
 ```
 ## Benchmark realizado
  
-Se implementó un benchmark en `bench/benchmark.cpp` que compara las tres soluciones (búsqueda lineal, `std::sort` y búsqueda binaria) para tamaños de entrada de 1,000 a 1,000,000 elementos. Cada medición promedia 100 repeticiones usando `std::chrono::high_resolution_clock`. Se usa una variable `volatile` para evitar que el compilador elimine la llamada al algoritmo por optimización. Los arreglos de prueba se generan con `generarRotado(n, n/3)`, que crea un arreglo rotado de tamaño n.
+Se implementó un benchmark en `benchmark/benchmark.cpp` que compara las dos soluciones (intercambio de valores y manipulación de punteros) para tamaños de entrada de 100 a 10,000 nodos. Cada medición promedia 10 repeticiones usando `std::chrono::high_resolution_clock`. Las listas de prueba se generan con `buildListSeq(n)` y `buildSLListSeq(n)`, que construyen listas secuenciales de 1 a `n`. En ambos casos se usa `k = n/2` para maximizar el trabajo del algoritmo y hacer la comparativa más representativa.
 
 
 
