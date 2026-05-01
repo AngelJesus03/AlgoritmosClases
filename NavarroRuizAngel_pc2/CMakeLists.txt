@@ -11,7 +11,7 @@ add_executable(demo
     src/solution.cpp)
 
 # Tests
-add_executable(test 
+add_executable(tests 
     tests/test.cpp 
     src/solution.cpp)
 
