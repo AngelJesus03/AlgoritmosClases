@@ -173,8 +173,8 @@ Cuando los elementos ocupan menos de (r-2)(r-1)/2, shrink() elimina el último b
 a) 
 
 La regla es simple:
-Si i < front.size() entonces está en front y su posición se calcula: front.size() - 1 – i
-Si i >= front.size() entonces está en back, en la posición i – front.size() 
+Si i < front.size() entonces está en front y su posición se calcula: front.size() - 1 - i
+Si i >= front.size() entonces está en back, en la posición i - front.size() 
 
 Sabiendo eso calculamos:
 
@@ -237,7 +237,7 @@ Aunque internamente la SEList usa bloques y una lista enlazada, hacia afuera ofr
 
 f) 
 
-La idea es mantener un vector de C++ en paralelo como referencia correcta. Se hacen muchas inserciones y eliminaciones aleatorias en ambas estructuras a la vez, y después de cada operación se verifica que el tamaño de la SEList coincida con el del vector. Al final se comparan todos los elementos en orden. Si en algún momento los tamaños difieren o algún elemento no coincide, hay un bug. Conviene probar con distintos valores de b porque con b=2 los bloques son muy pequeños y se ejercitan más seguido las operaciones de spread y gather, donde suelen esconderse los errores.
+La idea es mantener un vector en paralelo como referencia correcta. Se hacen muchas inserciones y eliminaciones aleatorias en ambas estructuras a la vez, y después de cada operación se verifica que el tamaño de la SEList coincida con el del vector. Al final se comparan todos los elementos en orden. Si en algún momento los tamaños difieren o algún elemento no coincide, hay un bug. Conviene probar con distintos valores de b porque con b=2 los bloques son muy pequeños y se ejercitan más seguido las operaciones de spread y gather, donde suelen esconderse los errores.
 
 ## Pregunta 6:
 
