@@ -197,15 +197,51 @@ Incluye en la tabla:
 Luego responde:
 
 1. ¿Qué significa visitar un nodo en preorden?
+
+Un nodo en preorden es un nodo que se visita antes de visitar sus hijos. 
+
+El orden de visita es: Nodo -> Hijo izquierdo -> Hijo derecho
+
 2. ¿Qué significa visitar un nodo en inorden?
+
+Visitar en inorden significa visitar el nodo después de visitar su hijo izquierdo pero antes de visitar su hijo derecho. 
+Está en el codigo BinNode::inorder() y se implementa con la lógica de visitar el nodo entre las llamadas recursivas a los hijos en la linea numero 
+
+El orden de visita es: hijo izquierdo -> nodo -> hijo derecho
+
 3. ¿Qué significa visitar un nodo en postorden?
+
+Visitar en postorden significa visitar el nodo después de visitar ambos hijos.
+
+El orden de visita es: hijo izquierdo -> hijo derecho -> nodo
+
 4. ¿Qué significa visitar un árbol por niveles?
+
+Significa visitar los nodos del árbol nivel por nivel, de izquierda a derecha. (BFS)
+
 5. ¿Por qué los recorridos recursivos tienen tiempo `O(n)`?
+
+Porque se visita cada nodo exactamente una vez, y el trabajo que se hace en cada nodo (imprimir, procesar, etc.) es constante. La recursión simplemente organiza la forma en que se visitan los nodos, pero el número total de visitas es igual al número de nodos en el árbol, lo que da un tiempo lineal O(n).
+
 6. ¿Por qué las versiones iterativas también tienen tiempo `O(n)`?
+
+
+
 7. ¿Cuál es la memoria auxiliar de un recorrido recursivo en un árbol balanceado?
+
+
+
 8. ¿Cuál es la memoria auxiliar de un recorrido recursivo en un árbol degenerado?
+
+
+
 9. ¿Qué diferencia hay entre usar una pila explícita y usar la pila de llamadas?
+
+
+
 10. ¿Por qué la cola del recorrido por niveles puede crecer mucho más en un árbol completo que en un árbol degenerado?.
+
+
 
 #### Bloque 4 - Demostración: evidencia observable
 
