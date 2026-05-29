@@ -147,7 +147,7 @@ Los archivos incluidos desde `Capitulo6.h` son:
 
 3. ¿Qué diferencia práctica hay entre `Capitulo6.h` y `Capitulo10.h`?
 
-- Capitulo10.h no añade funcionalidades adicionales, sino que incluye al Capitulo6.h como un envoltorio, por lo cual tiene acceso a todas sus funcionalidades. 
+- Capitulo10.h (alias de compatibilidad) no añade funcionalidades adicionales, sino que incluye al Capitulo6.h como un envoltorio, por lo cual tiene acceso a todas sus funcionalidades. 
 - En cambio, Capitulo6.h  incluye las funcionalidades del capítulo 6 como colas de prioridad, heaps y treaps.
 
 4. ¿Qué partes de Semana 6 dependen conceptualmente de Semana 5?
@@ -197,10 +197,32 @@ Luego modifica `PQ_ComplHeap_percolateDown.h` para usar esas funciones auxiliare
 Responde:
 
 1. ¿Por qué conviene expresar `parent`, `left`, `right` y pruebas de frontera como funciones pequeñas?
+
+Conviene expresar estas operaciones como funciones pequeñas porque mejora la legibilidad del código, reduce la posibilidad de errores al escribir las fórmulas repetidamente y facilita el mantenimiento. Además, al ser `constexpr`, el compilador puede optimizar estas funciones en tiempo de compilación, eliminando cualquier sobrecarga adicional.
+
 2. ¿Qué ventaja tiene `constexpr` frente a macros?
+
+constexpr ofrece varias ventajas sobre los macros:
+
+- Tipo seguro: Las funciones constexpr tienen tipos de retorno y parámetros definidos, lo que permite al compilador detectar errores de tipo, mientras que los macros simplemente realizan sustituciones de texto sin ningún tipo de verificación.
+
+- Mejor depuración: Las funciones constexpr pueden ser depuradas como cualquier otra función, mientras que los macros pueden dificultar la depuración debido a su naturaleza de sustitución de texto.
+
+- Alcance limitado: Las funciones constexpr respetan el alcance de las variables, mientras que los macros pueden afectar a cualquier parte del código donde se utilicen, lo que puede llevar a efectos secundarios no deseados.
+
+- Mejor legibilidad: Las funciones constexpr suelen ser más fáciles de leer y entender que los macros, especialmente para operaciones complejas.
+
 3. ¿Qué caso borde aparece cuando el nodo tiene solo hijo izquierdo?
+
+El caso borde que aparece es cuando el nodo tiene solo un hijo izquierdo, en este caso `pqHasRightChild(i, n)` sería falso, y el código debe manejar correctamente esta situación para evitar acceder a un índice fuera de los límites del arreglo.
+
 4. ¿Qué condición identifica una hoja en la representación implícita?
+
+Una hoja en la representación implícita se identifica cuando el índice del nodo no tiene hijos, es decir, cuando 
+
 5. ¿Qué cambió en `percolateDown` después de usar las funciones auxiliares?
+
+
 
 Entrega en este bloque:
 
