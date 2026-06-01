@@ -301,10 +301,24 @@ Crea una demostración pequeña donde elimines repetidamente el máximo de un he
 Responde:
 
 1. ¿Por qué después de `delMax` se mueve el último elemento a la raíz?
+
+Porque al eliminar la raíz queda un espacio vacío por lo que el último elemento se mueve allí para mantener el arreglo contiguo sin dejar espacios vacíos el heap implícito depende de que no haya huecos para que las fórmulas de índice funcionen correctamente.
+
 2. ¿Por qué la reparación baja y no sube?
+
+Porque el proceso de reparación busca restaurar la propiedad de heap, y después de colocar el último elemento en la raíz, es probable que este elemento sea menor que sus hijos, lo que viola la propiedad de heap. Por lo tanto, se necesita bajar el elemento para encontrar su posición correcta en el heap.
+
 3. ¿Cómo se decide entre hijo izquierdo e hijo derecho?
+
+Se elige el hijo que tenga mayor prioridad (en un max-heap, el hijo con el valor más grande) para intercambiar con el nodo actual. Esto asegura que la propiedad de heap se restaure correctamente.
+
 4. ¿Qué pasa si el nodo actual tiene un solo hijo?
+
+Solo puede tener hijo izquierdo porque en un heap completo el hijo derecho nunca existe sin el izquierdo. En ese caso se compara directamente con ese único hijo y se intercambia si corresponde.
+
 5. ¿Por qué `delMax` tiene costo `O(log n)`?.
+
+Porque percolateDown baja como máximo un nivel por iteración y la altura del heap es log n. En el peor caso el elemento recorre todo el camino desde la raíz hasta una hoja, exactamente log n pasos.
 
 Entrega en este bloque:
 
