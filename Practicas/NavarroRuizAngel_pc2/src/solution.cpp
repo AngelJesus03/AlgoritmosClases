@@ -31,7 +31,7 @@ Node* reverseKGroupNodes(Node* head, int k){
     for (int i=0;i<k;i++) {
         Node* next =curr->next;
         curr->next =prev;
-        prev=curr;
+        prev=curr;   
         curr=next;
     }
 

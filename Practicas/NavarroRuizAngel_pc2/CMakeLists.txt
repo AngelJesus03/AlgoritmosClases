@@ -10,6 +10,11 @@ add_executable(demo
     demos/ejemplos.cpp 
     src/solution.cpp)
 
+# Demo2
+add_executable(demo2
+    demos/ejemplos2.cpp
+    src/solution.cpp)   
+
 # Tests
 add_executable(tests 
     tests/test.cpp 

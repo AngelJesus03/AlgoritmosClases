@@ -65,6 +65,10 @@ int main() {
     int e9[]  = {1};
     int e10[] = {42};
 
+    //Caso 6: ejemplo vivo
+    int v11[] ={10,80,100,1,4,3,6};
+    int e11[] ={100,80,10,3,4,1,6};
+
     cout << "Ejecutando tests con la funcion 'reverseKGroupNodes'\n" << endl;
 
     ejecutar_test(v1,  5, e1,  2, "Caso normal 1");
@@ -77,6 +81,7 @@ int main() {
     ejecutar_test(v8,  5, e8,  4, "Caso k>nodos restantes 2");
     ejecutar_test(v9,  1, e9,  1, "Caso un elemento 1");
     ejecutar_test(v10, 1, e10, 1, "Caso un elemento 2");
+    ejecutar_test(v11, 7, e11, 3, "CASO EJEMPLO VIVO");
 
     cout << "\nTodos los tests pasaron" << endl;
     return 0;
