@@ -1,6 +1,7 @@
 #include "../include/solution.h"
 namespace ods {
 
+//Solucion A
 void SegmentTree::build(int node,int start,int end){ //construye el arbol
     if(start==end){
         tree[node] =1; //hoja
@@ -40,5 +41,20 @@ int SegmentTree::kesimo(int node,int start,int end,int k){ //retorna el indice
     else{
         return kesimo(2*node + 1,mid +1, end, k -tree[2*node]);
     }
+}
+
+//solucion B
+void ListaIngenua::build(const int* x,int n){
+    size=n;
+    for(int i=0;i<n;i++)
+        lista[i]=x[i+1]; //x es 1-index
+}
+
+int ListaIngenua::remove(int pos){
+    int val=lista[pos-1]; //obtener el valor
+    for(int i=pos-1;i<size-1;i++)
+        lista[i]=lista[i+1]; //desplaza hacia la izquierda
+    size--;
+    return val;
 }
 } // namespace ods
