@@ -63,12 +63,28 @@ int main(){
     int p3[] = {5, 4, 3, 2, 1};
     int e3[] = {5, 4, 3, 2, 1};
 
+    //caso 4: un solo elemento
+    int x4[] = {0, 42};
+    int p4[] = {1};
+    int e4[] = {42};
+
+    //caso 5: duplicados
+    int x5[] = {0, 5, 5, 5, 5, 5};
+    int p5[] = {3, 1, 2, 1, 1};
+    int e5[] = {5, 5, 5, 5, 5};
+
+    //caso 6: comparacion contra solucion ingenua
+    int x6[] = {0, 2, 6, 1, 4, 2};
+    int p6[] = {3, 1, 3, 1, 1};
 
     cout << "Ejecutando los tests con SegmentTree (solucion principal)\n" << endl;
 
     ejecutar_test(x1, 5, p1, e1, "Caso de ejemplo del problema");
     ejecutar_test(x2, 5, p2, e2, "Caso de eliminar siempre el primero");
     ejecutar_test(x3, 5, p3, e3, "Caso de eliminar siempre el ultimo");
+    ejecutar_test(x4, 1, p4, e4, "Caso de un solo elemento");
+    ejecutar_test(x5, 5, p5, e5, "Caso de duplicados");
+    comparar_con_ingenua(x6, 5, p6, "Caso de comparacion contra solucion ingenua");
     test_invariante("Caso de invariante principal");
 
     cout << "\nTodos los tests pasaron" << endl;
