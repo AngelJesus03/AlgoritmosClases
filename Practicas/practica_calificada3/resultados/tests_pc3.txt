@@ -1,0 +1,12 @@
+Comando: 
+./build/test_segment_tree
+
+Ejecutando los tests con SegmentTree (solucion principal)
+Caso de ejemplo del problema paso
+Caso de eliminar siempre el primero paso
+Caso de eliminar siempre el ultimo paso
+Caso de un solo elemento paso
+Caso de duplicados paso
+Caso de comparacion contra solucion ingenua paso
+Caso de invariante principal paso
+Todos los tests pasaron
