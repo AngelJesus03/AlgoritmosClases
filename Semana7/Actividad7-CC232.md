@@ -260,16 +260,23 @@ Responde:
 
 1. ¿Qué propiedad BST mantiene Red-Black Tree?
 
+Mantiene la propiedad de que para cada nodo, los valores en el subárbol izquierdo son menores y los valores en el subárbol derecho son mayores, asegurando así que el árbol sigue siendo un Binary Search Tree (BST) a pesar de las restricciones adicionales de color y balance notando así que estas son reglas adicionales y no alteran el orden.
 
 2. ¿Qué propiedades de color debe cumplir un Red-Black Tree?
 
+Las propiedades de color que debe cumplir un Red-Black Tree son:
+- ⁠Cada nodo es rojo o negro.
+- ⁠La raíz es siempre negra.
+- Los nodos rojos solo pueden tener hijos negros.
+- ⁠Todas las rutas desde un nodo a sus hojas nulas tienen la misma cantidad de nodos negros.
 
 3. ¿Por qué la raíz debe terminar negra?
 
+Si la raíz fuese roja, cualquier rotación o recoloreo que suba un nodo rojo a la raíz crearía ambigüedad en el conteo de altura negra por lo que pintarla negra garantiza consistencia sin costo alguno.
 
 4. ¿Qué significa que no pueda haber dos nodos rojos consecutivos?
 
-
+Significa que en cualquier camino desde la raíz hasta una hoja, nunca van a aparecen dos nodos rojos juntos, si un nodo fuese rojo, sus hijos deben ser negros por lo que esto limita cuánto puede crecer el árbol por la parte roja: entre cualquier par de nodos negros consecutivos en un camino puede haber a lo sumo un nodo rojo, lo que evita que un camino sea mucho más largo que otro.
 
 5. ¿Qué representa la altura negra?
 
