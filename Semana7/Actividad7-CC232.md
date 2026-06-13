@@ -162,18 +162,55 @@ Revisa:
 Responde:
 
 1. Define formalmente la propiedad BST.
+
+Un arbol binario al buscar cumple que para cada nodo t, todos sus valores a su izquierda cumpliran que sea menor que el propio nodo t y sus valores a la derecha cumpliran que sea estrictamente mayor.
+
 2. Explica por qué el recorrido inorder de un BST produce una secuencia ordenada.
+
+El recorrido inorder visita primero el subárbol izquierdo, luego la raíz y luego el subárbol derecho, como por la propiedad BST todo lo que está a la izquierda es menor y todo lo que está a la derecha es mayor, al seguir ese orden de visita los valores van saliendo de menor a mayor. 
+Por ejemplo, en un árbol con raíz 5, hijo izquierdo 3 e hijo derecho 8, el inorder produce 3, 5, 8, que es la secuencia ordenada.
+
 3. Explica por qué insertar claves ordenadas puede producir un BST degenerado.
+
+Cuando las claves llegan en orden creciente, cada nueva clave es mayor que todas las anteriores, entonces siempre se inserta como hijo derecho del nodo más profundo. El árbol crece solo hacia la derecha, como una lista enlazada. Lo mismo pasa en sentido contrario con claves decrecientes. No hay ramas izquierdas que balanceen la estructura.
+
 4. Construye manualmente el BST resultante de insertar:
 
 ```cpp
 10, 20, 30, 40, 50, 60, 70
 ```
 
+```
+10
+ \
+  20
+   \
+    30
+     \
+      40
+       \
+        50
+         \
+          60
+           \
+            70
+```
+
 5. Indica la altura del árbol anterior si no hay balanceo.
+
+El arbol se encuentra desbalanceado, graficamente se puede llegar a observar que pasaría de ser una estructura jerarquica (arbol) a una estructura totalmente lineal.
+
 6. Explica por qué una búsqueda en ese árbol puede costar `O(n)`.
+
+Al ser un arbol desbalanceado tiene como altura n-1 por lo que buscar un elemento que está en las hojas o uno que no existe nos exige bajar nodo por nodo lo cual seria practicamente lo mismo que usar una lista enlazada con una complejidad O(n).
+
 7. Explica qué problema intenta resolver AVL.
+
+AVL resuelve el problema de la degradación en altura. Mantiene un invariante que garantiza que la diferencia de alturas entre el subárbol izquierdo y el derecho de cualquier nodo nunca supera 1. Eso asegura que la altura total del árbol sea siempre O(log n), lo que mantiene búsqueda, inserción y eliminación en O(log n) en el peor caso.
+
 8. Explica qué problema intenta resolver Red-Black Tree.
+
+
 
 Entrega en este bloque:
 
