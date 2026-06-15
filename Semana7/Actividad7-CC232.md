@@ -230,9 +230,35 @@ Revisa:
 Responde:
 
 1. ¿Qué significa que un nodo esté balanceado en un AVL?
+
+Un nodo balanceado significa que la diferencia entre las alturas de sus subarboles izquierdos y derechos sea como maximo 1, para corroborar ello se tiene avlBalanced.
+
 2. ¿Cómo se calcula el factor de balance?
+
+El factor de balance se calcula con la diferencia de alturas entre el hijo izquierdo y el hijo derecho.
+
+   B (altura =1)
+   /\
+   A C
+
+balanceFactor(B) = stature(A) - stature(C) = 0 - 0 = 0 -> balanceado
+
+     C (altura =2)
+    /
+   B
+  /
+ A
+
+balanceFactor(C) = stature(B) − stature(null) = 1 − (−1) = 2 -> desbalanceado por lo cual tiene que haacer una rotación.
+
 3. ¿Qué información de altura debe mantenerse después de insertar o eliminar?
+
+Se debe mantener actualizado el campo height de todos los ancestros del nodo afectado.
+
 4. ¿Qué representa `_hot` dentro de la implementación estilo Deng?
+
+Después de insert o remove, _hot sirve como punto de partida para subir por los ancestros y rebalancear, no siempre es el padre del nodo insertado en general.
+
 5. ¿Por qué AVL puede heredar de `BST<T, Compare>`?
 6. ¿Qué operación restaura localmente la forma del árbol?
 7. ¿Por qué una rotación no destruye la propiedad BST?
@@ -244,6 +270,19 @@ Entrega en este bloque:
 * Una explicación de los invariantes AVL.
 * Un trazado de inserción con al menos una rotación.
 * Evidencia de salida de `demo_avl_deng_core.cpp`.
+
+./build/sem7_demo_avl_compact_rotations
+
+insert(30) -> root=30, height=0
+insert(20) -> root=30, height=1
+insert(10) -> root=20, height=1
+insert(25) -> root=20, height=2
+insert(28) -> root=20, height=2
+insert(27) -> root=25, height=2
+inorder: 10 20 25 27 28 30 
+level: 25 20 28 10 27 30 
+AVLTreeCompact(size=6, height=2)
+isAVL = true
 
 #### Bloque 4 - Rotaciones AVL: casos LL, RR, LR y RL
 
