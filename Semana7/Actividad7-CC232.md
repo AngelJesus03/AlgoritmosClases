@@ -8,19 +8,6 @@ Modalidad: Trabajo individual.
 
 Entrega: Un archivo llamado `Actividad7-CC232.md`.
 
-#### Objetivo
-
-Consolidar lo trabajado en la Semana 7 a partir de lectura de código, ejecución de demostraciones, revisión de pruebas, trazado manual y defensa escrita breve.
-
-La meta es entender cómo un árbol binario de búsqueda puede evitar la degeneración lineal mediante invariantes adicionales:
-
-1. AVL mantiene balance por altura.
-2. Red-Black Tree mantiene balance por colores.
-3. Ambas estructuras usan rotaciones para conservar el orden inorder del BST.
-4. La Semana 7 continúa las ideas de Semana 5 y Semana 6: BST, rotaciones, búsqueda ordenada, prioridad como propiedad adicional y estructuras que mantienen eficiencia mediante invariantes.
-
-El énfasis de esta actividad está en explicar no solo qué operación se ejecuta, sino qué invariante se mantiene, qué rotación aparece, qué evidencia produce el código y qué costo tiene cada operación.
-
 #### Material de trabajo
 
 #### Código de la semana
@@ -148,7 +135,18 @@ La evidencia inicial al ejecutar las pruebas sin modificar nada es que todas las
 Entrega en este bloque:
 
 * Una tabla con comando ejecutado, resultado, error si hubo e interpretación.
+
+| Comando ejecutado | Resultado | Error | Interpretación |
+|---|---|---|---|
+| `cmake -S . -B build-debug -DCMAKE_BUILD_TYPE=Debug` | Configuración generada correctamente, detectó GNU 13.3.0 como compilador | Ninguno | El proyecto quedó listo para compilar en modo Debug, no hubo problemas de configuración ni dependencias faltantes |
+| `cmake --build build-debug` | Se compilaron los diez targets, ocho demos y las dos pruebas, todo al 100% | Ninguno | Todo el código de la semana 7 compila limpio con C++17, sin warnings ni errores de enlazado |
+| `ctest --test-dir build-debug -R semana7 --output-on-failure` | Los dos tests semana7_public y semana7_internal pasaron, 100% exitoso | Ninguno | Tanto la prueba pública como la interna validan que AVL y Red-Black Tree, en sus distintas variantes, mantienen sus invariantes después de insertar y eliminar |
+
 * Una lista breve de los archivos que revisaste primero.
+
+README.md 
+CMakeLists.txt
+include/Capitulo7.h
 
 #### Bloque 2 - BST como punto de partida
 
@@ -210,7 +208,7 @@ AVL resuelve el problema de la degradación en altura. Mantiene un invariante qu
 
 8. Explica qué problema intenta resolver Red-Black Tree.
 
-
+Un red black tree busca resolver el problema de que un arbol binario de busqueda normal se puede desbalancear mucho si insertas datos en cierto orden, por ejemplo ya ordenados, y eso hace que las operaciones de busqueda insercion y eliminacion se vuelvan lentas porque terminan pareciendose a una lista enlazada con costo O(n) en vez de O(log n)
 
 Entrega en este bloque:
 
@@ -260,16 +258,45 @@ Se debe mantener actualizado el campo height de todos los ancestros del nodo afe
 Después de insert o remove, _hot sirve como punto de partida para subir por los ancestros y rebalancear, no siempre es el padre del nodo insertado en general.
 
 5. ¿Por qué AVL puede heredar de `BST<T, Compare>`?
+
+AVL puede heredar de BST porque en el fondo sigue siendo un arbol binario de busqueda, solo que le agrega la condicion extra de balance, entonces reutiliza toda la logica de busqueda insercion y estructura de nodos que ya tiene BST y solo añade lo necesario para mantenerse balanceado despues de cada operacion
+
 6. ¿Qué operación restaura localmente la forma del árbol?
+
+La operacion que restaura localmente la forma del arbol es la rotacion, ya sea simple o doble esta se aplica sobre el nodo mas desbalanceado y reacomoda unos pocos nodos sin tocar el resto del arbol
+
 7. ¿Por qué una rotación no destruye la propiedad BST?
+
+Una rotacion no destruye la propiedad BST porque solo reordena los punteros entre un nodo y sus hijos manteniendo el orden relativo de las claves es decir sigue respetando que todo lo que esta a la izquierda es menor y lo que esta a la derecha es mayor, solo cambia quien es padre y quien es hijo pero el recorrido inorden del arbol sigue dando la misma secuencia ordenada
+
 8. Después de insertar, ¿por qué suele bastar reparar el primer ancestro desbalanceado?
+
+Despues de insertar solo se agrega un nodo entonces el desbalance que se genera es local y ocurre en el primer ancestro que deja de cumplir la condicion de altura, al reparar ese nodo con una rotacion la altura de ese subarbol vuelve a quedar igual que antes de insertar entonces ya no afecta a los ancestros de mas arriba y no hace falta seguir revisando
+
 9. Después de eliminar, ¿por qué puede ser necesario seguir revisando hacia la raíz?.
+
+Despues de eliminar la rotacion que se hace en un nodo puede reducir la altura de ese subarbol en uno, y eso si puede desbalancear a un ancestro mas arriba, por eso hay que seguir subiendo y revisando cada ancestro hasta llegar a la raiz lo que a diferencia de insertar donde con una sola rotacion ya queda resuelto todo
 
 Entrega en este bloque:
 
 * Una explicación de los invariantes AVL.
 * Un trazado de inserción con al menos una rotación.
+```
+10           20
+ \           / \
+ 20   ->   10   30
+ \
+ 30
+```
 * Evidencia de salida de `demo_avl_deng_core.cpp`.
+
+```
+AVL inorder: 10 20 22 25 27 30 40 50 
+AVL level-order: 30 20 40 10 25 50 22 27 
+Valido AVL: si
+Tras borrar 20 y 40: 10 22 25 27 30 50 
+Valido AVL: si
+```
 
 ./build/sem7_demo_avl_compact_rotations
 
@@ -312,16 +339,78 @@ Incluye los cuatro casos:
 Responde:
 
 1. ¿Qué diferencia hay entre una rotación simple y una rotación doble?
+
+La diferencia es que la rotacion simple mueve un solo nodo para reacomodar el subarbol, mientras que la doble es en realidad dos rotaciones simples aplicadas seguidas, primero sobre el hijo y despues sobre el nodo desbalanceado porque con una sola no alcanza para corregir el desbalance
+
 2. ¿Por qué LL y RR se corrigen con una sola rotación?
+
+LL y RR se corrigen con una sola rotacion porque el desbalance esta en linea recta, o sea el nieto problematico esta del mismo lado que su padre, entonces basta con girar una vez el nodo desbalanceado hacia el lado contrario para enderezar todo
+
 3. ¿Por qué LR y RL requieren dos pasos?
+
+LR y RL requieren dos pasos porque el nieto problematico esta en zigzag respecto al abuelo, primero va para un lado y despues para el otro, entonces una sola rotacion no endereza la forma, hace falta primero enderezar el zigzag con una rotacion sobre el hijo y despues rotar el nodo desbalanceado como en el caso simple
+
 4. ¿Qué parte del árbol cambia y qué parte permanece igual?
+
+Lo que cambia son los punteros locales entre el nodo desbalanceado, su hijo y su nieto, junto con las alturas de esos nodos, lo que permanece igual es el resto del arbol que no participa en la rotacion y tambien el orden de las claves, ningun dato se pierde ni se mueve de lugar en el sentido logico
+
 5. ¿Por qué el inorder debe ser el mismo antes y después de reestructurar?.
+
+El inorder debe ser el mismo antes y despues porque la rotacion es solo un reacomodo estructural de punteros, no cambia que valores son menores o mayores que otros, entonces el recorrido inorden que refleja el orden de las claves tiene que mantenerse igual, si cambiara significaria que se rompio la propiedad de arbol binario de busqueda
 
 Entrega en este bloque:
 
 * Tabla de rotaciones.
+
+| Caso | Secuencia insertada | Nodo desbalanceado | Rotación aplicada | Inorder antes | Inorder después | Altura final |
+|------|---------------------|---------------------|--------------------|----------------|-------------------|----------------|
+| LL | 30, 20, 10 | 30 | Simple derecha | 20, 30 | 10, 20, 30 | 1 |
+| RR | 10, 20, 30 | 10 | Simple izquierda | 10, 20 | 10, 20, 30 | 1 |
+| LR | 30, 10, 20 | 30 | Doble izquierda derecha | 10, 30 | 10, 20, 30 | 1 |
+| RL | 10, 30, 20 | 10 | Doble derecha izquierda | 10, 30 | 10, 20, 30 | 1 |
+
 * Cuatro dibujos pequeños.
+
+**Caso LL**
+```
+   30               20
+   /        ->       /  \
+ 20               10   30
+/
+10
+```
+ 
+**Caso RR**
+```
+10                  20
+   \        ->       /  \
+   20              10   30
+      \
+      30
+```
+ 
+**Caso LR**
+```
+  30                20
+ /        ->       /  \
+10                10   30
+   \ 
+   20
+```
+ 
+**Caso RL**
+```
+10                  20
+ \        ->      /  \
+   30              10   30
+   /
+ 20
+```
+
 * Argumento de preservación del orden BST.
+
+La rotación nunca cambia qué claves son menores o mayores entre si, solo cambia cual nodo actua como padre y cual como hijo, los tres nodos involucrados en la rotacion, y sus subarboles se reacomodan de forma que se sigue respetando que todo lo que esta a la izquierda de un nodo es menor y todo lo que esta a la derecha es mayor.
+
 
 #### Bloque 5 - Red-Black Tree: balance por colores
 
@@ -356,32 +445,39 @@ Significa que en cualquier camino desde la raíz hasta una hoja, nunca van a apa
 
 5. ¿Qué representa la altura negra?
 
-
+La altura negra es la cantidad de nodos negros que hay en cualquier camino desde un nodo hasta las hojas nulas sin contar el nodo de partida, esta cantidad tiene que ser igual en todos los caminos que salen de un mismo nodo y es justamente esa regla la que garantiza que el arbol no se desbalancee demasiado
 
 6. ¿Por qué Red-Black Tree permite un balance menos estricto que AVL?
 
-
+Permite un balance menos estricto porque en vez de exigir que las alturas de los subarboles sean casi iguales como hace AVL, solo exige que el camino mas largo no sea mas del doble que el mas corto, eso se logra con las reglas de color en vez de comparar alturas exactas entonces se hacen menos rotaciones al insertar o eliminar aunque el arbol quede un poco menos balanceado que un AVL
 
 7. ¿Qué correcciones pueden aparecer después de insertar?
 
-
+Despues de insertar puede aparecer el caso de que un nodo rojo tenga un padre rojo, eso se corrige de dos formas dependiendo del color del tio, si el tio es rojo se hace un recoloreo subiendo el problema hacia el abuelo y si el tio es negro o nulo se hace una rotacion simple o doble junto con un recoloreo para arreglarlo localmente
 
 8. ¿Qué correcciones pueden aparecer después de eliminar?
 
-
+Despues de eliminar puede aparecer un nodo con doble negro, que es cuando falta un nodo negro en un camino, eso se corrige revisando al hermano del nodo problematico, si el hermano es rojo se rota y si el hermano es negro se recolorea o se rota dependiendo de si los hijos del hermano son rojos o negros y esto puede repetirse subiendo por el arbol hasta la raiz
 
 9. ¿Qué papel cumplen las rotaciones en Red-Black Tree?
 
-
+Las rotaciones cumplen el papel de reacomodar la estructura del arbol cuando el recoloreo solo no alcanza para resolver el desbalance, sirven para reducir la altura de un lado o redistribuir nodos negros entre subarboles igual que en AVL mantienen el orden BST y solo cambian localmente quien es padre y quien es hijo
 
 10. ¿Qué papel cumple el cambio de colores?.
 
+El cambio de colores cumple el papel de resolver la mayoria de los desbalances sin tener que tocar la estructura del arbol, es una operacion mas barata que una rotacion porque no mueve nodos, solo cambia una etiqueta y muchas veces basta con recolorear y seguir subiendo por los ancestros para que el arbol vuelva a cumplir las reglas de red black tree
 
 Entrega en este bloque:
 
 * Lista de invariantes Red-Black.
 * Explicación de una inserción que requiera recoloreo.
 * Evidencia de salida de `demo_redblack_morin.cpp`.
+```
+RB inorder: 2 3 6 7 8 10 11 13 18 22 26 
+Valido RedBlack: si
+Tras borrar 18 y 11: 2 3 6 7 8 10 13 22 26 
+Valido RedBlack: si
+```
 
 #### Bloque 6 - Comparación: BST, Treap, AVL y Red-Black Tree
 
@@ -411,18 +507,54 @@ Incluye:
 Responde:
 
 1. ¿Qué tienen en común BST, Treap, AVL y Red-Black Tree?
+
+Todos son arboles binarios de busqueda, es decir mantienen el orden de que lo menor va a la izquierda y lo mayor a la derecha y todos usan ese orden para buscar insertar y eliminar en tiempo proporcional a la altura del arbol, la diferencia entre ellos esta en como controlan esa altura para que no crezca demasiado
+
 2. ¿Qué diferencia hay entre prioridad en Treap, altura en AVL y color en Red-Black Tree?
+
+La prioridad en Treap es un valor aleatorio que se le asigna a cada nodo y que se usa para mantener una forma de heap ademas del orden BST, la altura en AVL es un dato que se calcula exactamente en cada nodo y que se usa para comparar los dos hijos y decidir si hace falta rotar y el color en RedBlack Tree es solo una etiqueta rojo o negro que sirve para aplicar reglas simples sin necesitar el valor exacto de la altura
+
 3. ¿Por qué Treap depende de prioridades?
+
+Treap depende de prioridades porque son las que determinan la forma del arbol mediante las reglas de heap, al ser asignadas aleatoriamente hacen que en promedio el arbol quede balanceado sin necesidad de reglas explicitas de balance como en AVL o Red Black, es un balance que se logra por probabilidad y no por una condicion garantizada siempre
+
 4. ¿Por qué AVL suele ser más estricto en altura?
+
+AVL suele ser mas estricto porque exige que la diferencia de alturas entre los dos subarboles de cualquier nodo sea como maximo uno eso obliga a rotar mas seguido para mantener esa condicion tan ajustada, a cambio se logra que las busquedas sean lo mas rapidas posibles porque el arbol se mantiene casi perfectamente balanceado
+
 5. ¿Por qué Red-Black Tree puede ser preferible cuando hay muchas inserciones y eliminaciones?
+
+RedBlack Tree puede ser preferible ahi porque al tener una regla de balance menos estricta necesita menos rotaciones en promedio para mantenerse valido, entonces insertar y eliminar resulta mas barato en la practica aunque las busquedas sean un poco mas lentas que en AVL, por eso se usa mucho en escenarios con muchas modificaciones como en estructuras de librerias estandar
+
 6. ¿Qué estructura elegirías para defender búsqueda ordenada con balance fuerte?
+
+Para defender busqueda ordenada con balance fuerte elegiria AVL porque su condicion de balance es la mas estricta de todas y eso garantiza la menor altura posible lo que se traduce en las busquedas mas rapidas y consistentes
+
 7. ¿Qué estructura elegirías para explicar balance probabilístico?.
+
+Para explicar balance probabilistico elegiria Treap, porque es la unica de estas estructuras que logra el balance a traves de la aleatoriedad de las prioridades y no mediante reglas deterministas como las rotaciones por altura o por color
 
 Entrega en este bloque:
 
 * Tabla comparativa.
+
+## Tabla comparativa
+
+| Estructura | Propiedad de orden | Propiedad adicional | Operación de reparación | Altura esperada o garantizada | Caso donde conviene usarla |
+|---|---|---|---|---|---|
+| BST común | Cumple orden BST, izquierda menor derecha mayor | Ninguna | No tiene, no se autocorrige | Puede degenerar a O(n) si se inserta en orden | Cuando los datos llegan ya desordenados y no hay riesgo de secuencias adversas |
+| Treap | Cumple orden BST | Prioridad aleatoria con forma de heap | Rotaciones guiadas por prioridad | O(log n) esperado, en promedio, por la aleatoriedad | Cuando se quiere balance simple de programar y no importa una garantía estricta, solo una esperanza estadística |
+| AVL | Cumple orden BST | Factor de balance por altura, máximo 1 de diferencia | Rotación simple o doble tras insertar o eliminar | O(log n) garantizado siempre, balance muy ajustado | Cuando hay muchas búsquedas y pocas modificaciones, se prioriza velocidad de lectura |
+| Red-Black Tree | Cumple orden BST | Reglas de color, altura negra igual en todos los caminos | Recoloreo y rotaciones tras insertar o eliminar | O(log n) garantizado, balance menos ajustado que AVL | Cuando hay muchas inserciones y eliminaciones, se prioriza que las modificaciones sean baratas |
+
 * Respuesta breve de decisión técnica.
+
+Si la prioridad es que las busquedas sean lo mas rapidas posible eligiria AVL y si la prioridad es que las inserciones y eliminaciones sean baratas eligiria Red-Black Tree, el Treap lo usaria mas para fines didacticos por su simplicidad y el BST comun solo si tengo certeza de que los datos no van a llegar en un orden que lo degenere.
+
 * Conexión explícita con Semana 5 y Semana 6.
+
+De Semana 5 se retoma la base del arbol binario de busqueda, sus recorridos y las operaciones basicas de insertar buscar y eliminar. 
+De Semana 6 se retoma la idea de Treap como estructura que combina orden BST con una propiedad extra, en este caso prioridad aleatoria, y esa misma logica de agregar una propiedad adicional sobre el BST base es la que despues se usa en Semana 7 con AVL usando altura y Red-Black Tree usando color, las demos demo_compare_avl_vs_redblack.cpp y demo_capitulo7_panorama.cpp muestran justamente eso, distintas formas de resolver el mismo problema de mantener balance sobre la misma base BST.
 
 #### Bloque 7 - Pruebas, invariantes y defensa oral
 
@@ -434,20 +566,70 @@ Revisa:
 Responde:
 
 1. ¿Qué operaciones valida la prueba pública para AVL?
+
+La prueba publica para AVL valida que al insertar una secuencia que genera desbalance el arbol termine con la altura correcta y el inorder ordenado tambien valida que al eliminar un nodo el arbol siga siendo un AVL valido y el inorder quede correcto ademas prueba la version compacta verificando que la raiz quede en el nodo esperado despues de una rotacion
+
 2. ¿Qué operaciones valida la prueba pública para Red-Black Tree?
+
+La prueba publica para Red-Black Tree valida que al insertar una secuencia de valores el arbol cumpla las reglas de red black con verifyRB, que no se pueda insertar un valor duplicado, y que despues de eliminar un nodo el arbol se siga verificando como valido, esto se prueba tanto en la version normal como en la version LLRB, y en esta ultima ademas se revisa que el inorder quede correcto despues de eliminar
+
 3. ¿Qué casos adicionales cubre la prueba interna?
+
+La prueba interna cubre casos adicionales como validar el BST base por separado, probar otra implementacion de BST con contains y busquedas de cota inferior y superior, y sobre todo hace una prueba masiva con datos aleatorios insertando 250 valores y eliminando 120 en las cuatro estructuras a la vez, comparando siempre contra un set de referencia para asegurar que todas queden balanceadas y ordenadas igual
+
 4. ¿Qué significa que una prueba valide el inorder?
+
+Que una prueba valide el inorder significa que compara el recorrido en orden del arbol contra la secuencia esperada de valores ordenados, si coinciden confirma que la propiedad BST se mantiene intacta y que ninguna rotacion o recoloreo desordeno las claves
+
 5. ¿Qué significa que una prueba valide alturas o factores de balance?
+
+Que una prueba valide alturas o factores de balance significa que revisa que en cada nodo la diferencia entre la altura del subarbol izquierdo y el derecho este dentro del limite permitido y que el valor de altura guardado en cada nodo coincida con el que realmente le corresponde segun sus hijos
+
 6. ¿Qué significa que una prueba valide colores?
+
+Que una prueba valide colores significa que revisa que se cumplan las reglas de red black, como que la raiz sea negra, que ningun nodo rojo tenga un hijo rojo y que la altura negra sea igual en todos los caminos desde un nodo hasta las hojas
+
 7. ¿Qué no demuestra pasar solo las pruebas públicas?
+
+Pasar solo las pruebas publicas no demuestra que la implementacion funcione bien en general porque son pocos casos armados a mano con secuencias especificas, no prueban con muchos datos aleatorios ni casos limite entonces puede que la estructura falle en escenarios que esas pruebas puntuales no llegan a cubrir
+
 8. ¿Qué evidencia usarías en una sustentación: demostración, prueba, trazado o argumento de complejidad?
+
+En una sustentacion usaria una combinacion de trazado y argumento de complejidad, el trazado sirve para mostrar paso a paso como se comporta la estructura en un caso concreto y que se entienda visualmente, y el argumento de complejidad sirve para justificar por que esa estructura garantiza cierto tiempo de ejecucion en el caso general, la prueba automatizada respalda que la implementacion es correcta pero no reemplaza la explicacion conceptual
+
 9. ¿Qué invariante revisarías primero si falla AVL?
+
+Si falla AVL lo primero que revisaria es el factor de balance de cada nodo, o sea que la diferencia de alturas entre hijos izquierdo y derecho no pase de uno porque esa es la invariante central de AVL y cualquier fallo ahi indica que una rotacion no se aplico bien o que la altura no se actualizo correctamente
+
 10. ¿Qué invariante revisarías primero si falla Red-Black Tree?.
+
+Si falla RedBlack Tree lo primero que revisaria es la altura negra, es decir que todos los caminos desde un nodo hasta las hojas tengan la misma cantidad de nodos negros porque esa es la invariante mas importante y sus fallos suelen venir de un recoloreo o una rotacion que no se aplico como correspondia
 
 Entrega en este bloque:
 
 * Tabla de pruebas revisadas.
+
+## Tabla de pruebas revisadas
+
+| Archivo | Estructuras probadas | Qué valida | Assert clave |
+|---|---|---|---|
+| `test_public_week7.cpp` | AVL (Deng) | Inorder y altura tras insertar 30,20,10 | `inorder == {10,20,30}`, `isAVLValid()`, `height() == 1` |
+| `test_public_week7.cpp` | AVL (Deng) | Inorder valido tras eliminar un nodo | `remove(20)`, `isAVLValid()`, inorder ordenado |
+| `test_public_week7.cpp` | Red-Black Tree (Morin) | Reglas de color, rechazo de duplicados, eliminación | `verifyRB()`, `!add(22)` porque ya existe, `remove(18)`, `verifyRB()` de nuevo |
+| `test_public_week7.cpp` | AVL compacto | Raíz correcta tras rotación LR | `root()->data == 20`, `isAVL()` |
+| `test_public_week7.cpp` | Red-Black LLRB | Validez tras insertar y eliminar, inorder final | `isRedBlackTree()`, `remove(20)`, inorder esperado |
+| `test_internal_week7.cpp` | BST base (Deng) | Validez BST tras eliminar | `isBSTValid()`, inorder tras `remove(5)` |
+| `test_internal_week7.cpp` | BinarySearchTree1 (Morin) | Búsqueda y cotas | `contains(30)`, `lowerBound(25)`, `upperBound(30)` |
+| `test_internal_week7.cpp` | AVL, RB Morin, AVL compacto, RB LLRB juntas | Inserción masiva aleatoria (250 valores) contra un `set` de referencia | Cada estructura valida sus invariantes y su inorder coincide con el oráculo |
+| `test_internal_week7.cpp` | Las mismas cuatro estructuras | Eliminación masiva aleatoria (120 valores) manteniendo invariantes | Cada estructura sigue válida y ordenada después de cada `remove` |
+
 * Lista de invariantes que defenderías.
+
+- Propiedad BST, todo nodo izquierdo menor y todo nodo derecho mayor, verificado con el inorder ordenado en todas las estructuras
+- Factor de balance en AVL, la diferencia de alturas entre hijos no pasa de uno, verificado con isAVLValid() e isAVL()
+- Altura guardada en cada nodo coincide con la altura real calculada desde sus hijos
+- Altura negra igual en todos los caminos desde un nodo hasta las hojas
+
 * Evidencia de ejecución de `ctest`.
 
 #### Bloque 8 - Ejercicios de codificación
@@ -483,6 +665,26 @@ Incluye comentarios en español:
 
 ```cpp
 // Valida que cada nodo respete los limites heredados desde sus ancestros.
+template <typename Node, typename T>
+bool validateBST(Node* node, const T* minValue, const T* maxValue) {
+  if (node == nullptr) return true;
+
+  // Si hay un limite inferior heredado, el dato debe ser estrictamente mayor.
+  if (minValue && !(node->data > *minValue)) return false;
+
+  // Si hay un limite superior heredado, el dato debe ser estrictamente menor.
+  if (maxValue && !(node->data < *maxValue)) return false;
+
+  // El hijo izquierdo hereda el mismo minValue, pero su nuevo maxValue
+  // pasa a ser el dato del nodo actual.
+  if (!validateBST(node->left, minValue, &node->data)) return false;
+
+  // El hijo derecho hereda el mismo maxValue, pero su nuevo minValue
+  // pasa a ser el dato del nodo actual.
+  if (!validateBST(node->right, &node->data, maxValue)) return false;
+
+  return true;
+}
 ```
 
 Entrega:
@@ -490,6 +692,8 @@ Entrega:
 * Código fuente.
 * Salida de la demostración.
 * Explicación de por qué validar solo padre-hijo no es suficiente.
+
+Validar solo padre-hijo no alcanza porque esa comparacion es local, no arrastra los limites de los ancestros mas arriba. Por ejemplo, un nieto puede ser mayor que su padre pero terminar colgando del lado izquierdo de la raiz sin ser menor que ella, ese caso pasa el chequeo padre-hijo pero ya no es un BST valido. Por eso hace falta ir heredando un limite minimo y maximo en cada nivel, asi cada nodo se compara contra todos sus ancestros y no solo contra el de arriba.
 
 #### Ejercicio 2 - Contador de rotaciones AVL
 
@@ -822,6 +1026,9 @@ La respuesta debe incluir obligatoriamente:
 * Una afirmación sobre cómo esta semana continúa Semana 5 y Semana 6.
 * Una afirmación sobre qué evidencia usarías para defender correctitud: pruebas, demostraciones, invariantes, trazados y complejidad.
 
+Un BST comun puede degenerar a una forma casi lineal si se insertan los datos ya ordenados, por ejemplo insertar 1,2,3,4,5 en orden hace que cada nodo solo tenga hijo derecho y el arbol termine pareciendose a una lista enlazada con busquedas de costo O(n) en vez de O(log n), y eso es justo lo que cambia cuando pasamos a AVL y RedBlack Tree porque ambas usan rotaciones para reacomodar la estructura sin romper el orden, una rotacion solo cambia quien es padre y quien es hijo entre pocos nodos pero el recorrido inorder sigue dando la misma secuencia ordenada antes y despues, como vimos en el caso LL con 30,20,10 que termina con 20 de raiz pero el inorder sigue siendo 10,20,30. 
+AVL logra su balance exigiendo que la diferencia de alturas entre los dos hijos de cualquier nodo sea como maximo uno, entonces rota apenas se rompe esa condicion, mientras que Red-Black Tree logra un balance mas relajado usando reglas de color, como que la raiz sea negra y que ningun nodo rojo tenga hijo rojo, y que la altura negra sea igual en todos los caminos hasta las hojas, por eso se dice que AVL tiene un balance estricto que prioriza busquedas muy rapidas a costa de rotar mas seguido, y RedBlack Tree tiene un balance flexible que tolera un poco mas de desnivel a cambio de necesitar menos rotaciones al insertar o eliminar. En cualquiera de los dos, a diferencia del BST comun, se garantiza que buscar insertar y eliminar cuesta O(log n) sin importar el orden en que lleguen los datos, ya no depende de la suerte como en un BST sin balance. Esta semana continua directamente lo que se vio en Semana 5 con el BST basico y sus recorridos, y lo que se vio en Semana 6 con Treap, que ya mostraba la idea de agregar una propiedad extra sobre el BST para lograr balance, solo que ahi era con prioridad aleatoria y aca es con altura o con color. Para defender que todo esto es correcto usaria una combinacion de pruebas automatizadas como las que corrimos con ctest que validan invariantes con datos aleatorios, trazados paso a paso de una insercion con rotacion para mostrar visualmente que pasa, y un argumento de complejidad que explique por que la altura queda acotada logaritmicamente, esa combinacion es mas solida que confiar en una sola de esas evidencias por separado.
+
 #### Formato sugerido de entrega
 
 ```markdown
@@ -874,9 +1081,3 @@ La respuesta debe incluir obligatoriamente:
 - Qué evidencia usaría en una sustentación:
 - Qué parte del código debo revisar otra vez:
 ```
-
-#### Criterio general de trabajo
-
-Se espera lectura real de los archivos, respuestas breves pero justificadas, tablas con evidencia observable, trazados manuales y conexión explícita entre código, correctitud, costo, representación e invariantes.
-
-No basta con ejecutar el programa: debes poder explicar qué propiedad mantiene cada estructura, qué rotación se aplica, qué color o altura se actualiza, qué caso borde aparece y por qué la operación conserva búsqueda ordenada eficiente.
